@@ -201,7 +201,7 @@ plot(g.S)
 
 Na figura acima, percebe-se que quando $\hat{\beta_0}$ é próximo de -0.5, a soma de quadrado dos resíduos é alta, assim como perto de 0.5. Entretanto, quando $\hat{\beta_0}$ é próximo de 0, S atinge os menores valores. Se fizéssemos esse procedimento com $\hat{\beta_1}$, esse mesmo comportamento seria observado. Em outras palavras, existe um determinado valor de $\hat{\beta_0}$ e $\hat{\beta_1}$ que resultam no valor mínimo de S. Para encontrar os valores exatos, podemos fazer uso do cálculo diferencial.
 
-Analisando a figura, percebemos que o ponto que resulta no menor valor de S é um ponto de mínima, e se trassarmos uma reta tangente à curva nesse ponto, essa reta será perfeitamente horizontal. 
+Analisando a figura, percebemos que o ponto que resulta no menor valor de S é um ponto de mínima, e se traçarmos uma reta tangente à curva nesse ponto, essa reta será perfeitamente horizontal. 
 
 Uma maneira adequada para encontrar pontos críticos em uma função é utilizando cálculo diferencial, sabendo que nos pontos onde a primeira derivada for igual a zero, então a tangente da função será perfeitamente horizontal, marcando assim um ponto de máxima ou mínima.
 
