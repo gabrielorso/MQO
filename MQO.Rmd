@@ -1,5 +1,5 @@
 ---
-title: "MQO"
+title: "Mínimos Quadrados Ordinários"
 author: "Gabriel Orso"
 date: '`r format(Sys.time(), "%d %B, %Y")`'
 output: 
