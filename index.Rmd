@@ -6,6 +6,7 @@ output:
   html_document: 
     fig_height: 4
     fig_width: 5
+    toc: yes
 editor_options: 
   chunk_output_type: console
 ---
@@ -29,7 +30,7 @@ library(kableExtra)
 
 Utilizaremos o banco de dados **trees**. Esse banco de dados contém informações sobre o diâmetro em polegadas, altura em pés e volume em pés³ de 31 árvores *black cherry*.  
 
-Além disso, os gráficos serão gerados utilizando o pacote `ggplot2`, com comentários pertinentes sobre as funções utilizadas. Os comandos do pacote `ggplot2` são inseridos em camadas, normalmente iniciando por uma função que indica o banco de dados utilizado, e posteriormente as demais funções. As variáveis que serão utilizadas para criar os gráficos devem sempre estar "mapeadas" para serem encontradas, e a maneira de fazer isso é inserindo-as dentro do argumento `aes()`. No exemplo abaixo, o primeiro nível de comando especifica o banco de dados utilizado. O segundo indica o tipo de gráfico a ser criado e mapeia as variáveis de interesse. O terceiro comando introduz os títulos dos eixos, do gráfico, etc. E o quarto comando aplica um tema pronto ao gráfico.
+Além disso, os gráficos serão gerados utilizando o pacote `ggplot2`, com comentários pertinentes sobre as funções utilizadas. Os comandos do pacote `ggplot2` são inseridos em camadas, normalmente iniciando por um comando que indica o banco de dados utilizado, e posteriormente os demais comandos. As variáveis que serão utilizadas para criar os gráficos devem sempre estar "mapeadas" para serem encontradas, e a maneira de fazer isso é inserindo-as dentro do argumento `aes()`. No exemplo abaixo, o primeiro nível de comando especifica o banco de dados utilizado. O segundo indica o tipo de gráfico a ser criado e mapeia as variáveis de interesse. O terceiro comando introduz os títulos dos eixos, do gráfico, etc. E o quarto comando aplica um tema pronto ao gráfico.
 
 
 
@@ -43,7 +44,7 @@ ht <- trees$Height/3.281  # pés para metros
 v <- trees$Volume/34.286  # pés cúbicos para metros cúbicos
 d2h <- d^2*ht             
 
-# 'd' é um vetor de diâmetros, e possui 31 elementos. Ou length(d)
+# 'd' é um vetor de diâmetros, e possui 31 elementos.
 d
 length(d)
 
@@ -55,11 +56,11 @@ dados <- data.frame(d,ht,v,d2h)
 g.base <- ggplot(data = dados, 
                  aes(x = d2h, y = v)) +     #Introduz o dataframe utilizado
   
-  geom_point() + #geom_point cria gráfico de pontos)
+  geom_point() + #geom_point cria gráfico de pontos
   
-  labs(x = "d2h",          #Adiciona Títulos dos eixos e do gráfico
-       y = "Volume (m³)",
-       title = "Volume em função de d2h") + 
+  labs(x = expression("d"^2*"h"),          #Adiciona Títulos dos eixos e do gráfico
+       y = expression("Volume (m"^3*")"),
+       title = expression("Volume em função de d"^2*"h")) + 
   
   theme_bw()                #Adiciona o tema Black and White
 
@@ -70,7 +71,7 @@ plot(g.base)
 
 
 
-A figura acima demonstra a relação entre volume e $d^2h$. Essa relação é conhecida no meio florestal através do modelo de Spurr: $v = \beta_0 + \beta_1.d^2h$, e evidencia a relação linear entre as duas variáveis.
+A figura acima demonstra a relação entre volume e $d^2h$. Essa relação é conhecida no meio florestal através do modelo de Spurr: $v = \beta_0 + \beta_1.d^2h$, e evidencia a relação linear entre $v$ e $d^2h$.
 
 Para encontrar os parâmetros do modelo, basta utilizar a função `lm()`.
 
@@ -94,9 +95,11 @@ Os valores de $\beta_0$ e $\beta_1$ encontrados foram de `r round(coef(spurr)[1]
 
 Agora vamos tentar chegar nos mesmos parâmetros realizando o método dos mínimos quadrados ordinários passo a passo.
 
+***
+
 ## Mínimos Quadrados Ordinários
 
-O método dos mínimos quadrados ordinários é o principal método de estimativa dos parâmetros para regressões lineares, e tem como objetivo encontrar os parâmetros do modelo que resultem na menor soma de quadrados dos resíduos. Sua utilização depende de pressuposições que devem ser satisfeitas. São elas:
+O método dos mínimos quadrados ordinários é o principal método de estimativa dos parâmetros para regressões lineares, e tem como objetivo encontrar os parâmetros do modelo que resultem na menor soma de quadrados dos resíduos. Sua utilização depende de pressupostos que devem ser atendidos. São eles:
 
 - **1.** Erro com média 0 e distribuição normal;
 - **2.** Variância do erro constante;
@@ -129,7 +132,7 @@ $$
 $$
 
 
-Como citado anteriormente, o objetivo do método é encontrar os parâmetros que resultem na menor soma de quadrados de resíduos. Como os resíduos devem possuir média zero e distribuição normal, alguns resíduos são positivos e outros negativos, e seu somatório resultaria no valor zero. Daí a necessidade de elevar cada erro $\epsilon$ ao quadrado.
+Como citado anteriormente, o objetivo do método é encontrar os parâmetros que resultem na menor soma de quadrados de resíduos. Como os resíduos devem possuir média zero e distribuição normal, alguns resíduos são positivos e outros negativos, e seu somatório resultaria em um valor próximo de zero. Daí a necessidade de elevar cada erro $\epsilon$ ao quadrado.
 
 $$
 S = \sum_{i=1}^{n} \epsilon_i^2 = min
@@ -150,7 +153,7 @@ S = \sum_{i=1}^{n} (y_i - \hat{\beta_0} - \hat{\beta_1}x_i)^2 = min
 $$
 
 
-Agora, se atribuíssemos algum valor para os parâmetros no modelo acima e calculássemos o somatório, isso resultaria em um valor S de Soma de Quadrados de Resíduos. Conforme os valores dos parâmetros mudam, então também a Soma de Quadrados de Resíduos (S) irá mudar.
+Agora, se atribuíssemos algum valor para os parâmetros no modelo acima e calculássemos o somatório, isso resultaria em um valor S de Soma de Quadrados de Resíduos. Conforme os valores dos parâmetros mudam, também muda a Soma de Quadrados de Resíduos (S).
 
 ```{r Variação de S, echo = TRUE}
 
@@ -188,8 +191,8 @@ df <- data.frame("b0" = b_0,
 
 g.S <- ggplot(data = df, aes(x = b0, y = S)) + 
   geom_line(aes(color = S.est), size = 1) +  # Cria uma reta conectando cada observação. Como são 101 pontos, o resultado terá uma aparência  de curva parabólica.
-  labs(x = "Parâmetro b0", y = "S (m³)²", subtitle = "Efeito de b0 na Soma de Quadrado dos Resíduos") + 
-  scale_color_gradient(low = "blue", high = "red", name = "S (m³)²") + 
+  labs(x = expression(beta[0]*" Estimado"), y = expression("S (m"^3*")"^2), subtitle = expression("Efeito de "*beta[0]*" na Soma de Quadrado dos Resíduos")) + 
+  scale_color_gradient(low = "blue", high = "red", name = expression("S (m"^3*")"^2)) + 
   geom_segment(aes(x=-0.2,xend=0.2, y = min(S), yend = min(S)), color = "black") +
   theme_bw()
 
@@ -212,6 +215,10 @@ Primeiramente podemos abrir o polinômio da função $S$.
 $$
 S = \sum_{i=1}^{n} (y_i - \hat{\beta_0} - \hat{\beta_1}x_i)^2
 $$
+$$
+S = \sum_{i=1}^{n} (y_i - \hat{\beta_0} - \hat{\beta_1}x_i) . (y_i - \hat{\beta_0} - \hat{\beta_1}x_i)
+$$
+
 
 $$
 S = \sum_{i=1}^{n} (y_i^2 - y_i\hat{\beta_0} - y_i\hat{\beta_i}x_i-y_i\hat{\beta_0} + \hat{\beta_0}^2 + \hat{\beta_0}\hat{\beta_1}x_i - y_i\hat{\beta_1}x_i + \hat{\beta_0}\hat{\beta_1}x_i + \hat{\beta_1}^2x_i^2)
@@ -300,7 +307,7 @@ $$
 
 ----
 
-### Derivada paricla em relação à $\hat{\beta_1}$
+### Derivada parcial em relação à $\hat{\beta_1}$
 
 A derivada de $S$ em relação a $\hat{\beta_1}$ é
 
